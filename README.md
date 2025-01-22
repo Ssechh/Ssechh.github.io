@@ -1,3 +1,5 @@
+theme: jekyll-theme-Architect
+
 # h1 Heading
 ## h2 Heading
 ### h3 Heading
@@ -26,5 +28,3 @@ _This is italic text_
 > Blockquotes can also be nested...
 >> ...by using additional greater-than signs right next to each other...
 > > > ...or with spaces between arrows.
-
-## Lists
