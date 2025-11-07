@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>SSECHH • Altin Qalliu</title>
-  <meta name="description" content="Altin Qalliu — CS student at St. John's University. Interests in game development, software engineering, databases, algorithms, and AI research." />
+  <meta name="description" content="Altin Qalliu — B.S in Computer Science from St. John's University. Interests in game development, software engineering, databases, algorithms, and AI research." />
 
   <!-- Open Graph / Twitter -->
   <meta property="og:title" content="SSECHH • Altin Qalliu" />
-  <meta property="og:description" content="CS student at St. John's University — projects, publications, and contact." />
+  <meta property="og:description" content="B.S in Computer Science from St. John's University — projects, publications, and contact." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://i.imgur.com/PvrVL2J.jpeg" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -38,6 +38,43 @@
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
+
+    /* --- Interests hover effect gradient scale --- */
+    .interest-pill {
+        transition:
+            transform .18s ease,
+            color .18s ease,
+            border-color .18s ease,
+            background .18s ease;
+        position: relative;
+        overflow: hidden; 
+    }
+
+    /* Hover animation */
+    .interest-pill:hover {
+        transform: scale(1.05);         /*  enlarge */
+        color: #fff;
+        border-color: rgba(255,255,255,.2);
+
+        background: linear-gradient(90deg, #ff2a2a, #2a6bff);
+        background-size: 200% 100%;         /* allows gradient animation */
+        animation: interest-gradient-move 2.2s linear infinite;
+    }
+
+    /* Keyframes for moving gradient animation */
+    @keyframes interest-gradient-move {
+        0% { background-position: 0% 0; }
+        100% { background-position: 200% 0; }
+    }
+
+    /* Reduced motion users */
+    @media (prefers-reduced-motion: reduce) {
+        .interest-pill:hover {
+            animation: none;
+            background-position: 100% 0;
+        }
+    }
+
     body{
       margin:0;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
