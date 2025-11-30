@@ -1,0 +1,1 @@
+This'll be a introductory/gateway website to finding out more about me and my work. Planned on it being simple at first but as of 11/30/2025 I want to go for something better. Doesn't hurt to try and do some crazy stuff with my own creations
