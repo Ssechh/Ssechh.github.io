@@ -200,20 +200,23 @@
     .card::after{
       content:"";
       position:absolute;
-      inset:-45%;
+      inset:-75%;
       z-index:0;
       pointer-events:none;
-
+      
       background:
-        radial-gradient(circle at 22% 28%, rgba(0,250,255,0.34), transparent 58%),
-        radial-gradient(circle at 78% 70%, rgba(255,0,106,0.30), transparent 58%),
-        radial-gradient(circle at 58% 20%, rgba(129,43,255,0.26), transparent 58%),
-        linear-gradient(135deg, rgba(0,250,255,0.06), rgba(255,0,106,0.06));
+        radial-gradient(circle at 22% 28%, rgba(0,250,255,0.22), transparent 60%),
+        radial-gradient(circle at 78% 70%, rgba(255,0,106,0.20), transparent 60%),
+        radial-gradient(circle at 58% 20%, rgba(129,43,255,0.18), transparent 60%);
 
+      filter: blur(10px);
       mix-blend-mode: screen;
-      opacity: 1;
+      opacity: 0.95;
+      transform-origin: 50% 50%;
+      will-change: transform;
       animation: driftLayer var(--dur, 18s) linear infinite;
     }
+
 
     /* Keep content above drifting layer */
     .hero > *,
@@ -239,16 +242,17 @@
     .card:hover::before{ opacity:0.65; }
 
     @keyframes driftLayer{
-      0%   { transform: translate3d(var(--x1, -10%), var(--y1, -8%), 0) scale(1.18) rotate(var(--r1, 0deg)); }
-      50%  { transform: translate3d(var(--x2, 10%),  var(--y2, 8%),  0) scale(1.22) rotate(var(--r2, 10deg)); }
-      100% { transform: translate3d(var(--x1, -10%), var(--y1, -8%), 0) scale(1.18) rotate(var(--r1, 0deg)); }
+      0%   { transform: translate3d(var(--x1, -8%), var(--y1, -6%), 0) scale(1.28) rotate(var(--r1, 0deg)); }
+      50%  { transform: translate3d(var(--x2,  8%), var(--y2,  6%), 0) scale(1.32) rotate(var(--r2, 6deg)); }
+      100% { transform: translate3d(var(--x1, -8%), var(--y1, -6%), 0) scale(1.28) rotate(var(--r1, 0deg)); }
     }
 
     /* Drift presets (different paths) */
-    .drift-a{ --dur: 16s; --x1:-12%; --y1:-8%; --x2: 10%; --y2: 9%; --r1:-3deg; --r2: 10deg; }
-    .drift-b{ --dur: 22s; --x1: 10%; --y1:-10%; --x2:-12%; --y2: 8%; --r1: 4deg; --r2:-6deg; }
-    .drift-c{ --dur: 18s; --x1:-9%;  --y1: 10%; --x2: 12%; --y2:-9%; --r1: 3deg; --r2: 12deg; }
-    .drift-d{ --dur: 26s; --x1: 12%; --y1: 7%;  --x2:-10%; --y2:-8%; --r1:-4deg; --r2: 7deg; }
+    .drift-a{ --dur: 16s; --x1:-10%; --y1:-6%; --x2: 8%; --y2: 7%; --r1:-2deg; --r2: 6deg; }
+    .drift-b{ --dur: 22s; --x1:  8%; --y1:-8%; --x2:-10%; --y2: 6%; --r1: 3deg;  --r2:-5deg; }
+    .drift-c{ --dur: 18s; --x1:-8%;  --y1: 8%; --x2: 10%; --y2:-7%; --r1: 2deg;  --r2: 7deg; }
+    .drift-d{ --dur: 26s; --x1: 10%; --y1: 6%; --x2:-8%;  --y2:-6%; --r1:-3deg; --r2: 5deg; }
+
 
     /* HERO */
     .hero{
