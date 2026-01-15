@@ -53,13 +53,9 @@
         var(--bg);
       position:relative;
       overflow-x:hidden;
-
-      /* Ambient drift for the whole page (mobile-friendly) */
-      background-size: 140% 140%, 140% 140%, 140% 140%, auto;
-      animation: ambientShift 44s ease-in-out infinite;
     }
 
-    /* subtle CRT/grid overlay */
+    /* subtle CRT/grid overlay (STATIC to avoid top-bar artifact) */
     body::before{
       content:"";
       position:fixed;
@@ -69,10 +65,9 @@
         linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
       background-size: 40px 40px;
-      opacity:0.25;
+      opacity:0.22;
       mix-blend-mode:soft-light;
       z-index:-1;
-      animation: gridDrift 120s linear infinite;
     }
 
     a{color:var(--link); text-decoration:none}
@@ -118,10 +113,7 @@
       display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
 
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight:700;
-    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700;}
 
     .badge{
       display:inline-flex; align-items:center; gap:8px;
@@ -166,14 +158,8 @@
       transition: transform .22s ease-out, opacity .22s;
       opacity:0;
     }
-    nav a:hover{
-      color:var(--text);
-      text-decoration:none;
-    }
-    nav a:hover::after{
-      transform:scaleX(1);
-      opacity:1;
-    }
+    nav a:hover{color:var(--text); text-decoration:none;}
+    nav a:hover::after{transform:scaleX(1); opacity:1;}
 
     /* Mobile nav */
     .hamburger{display:none; background:none; border:0; color:var(--text); font-size:22px}
@@ -188,55 +174,14 @@
         border-radius:12px; padding:12px;
         box-shadow:var(--shadow-soft);
       }
-      .menu.open a{
-        padding:6px 10px;
-        border-radius:8px;
-        font-size:11px;
-      }
-      .menu.open a:hover{
-        background:#070b1e;
-        text-decoration:none;
-      }
+      .menu.open a{padding:6px 10px; border-radius:8px; font-size:11px;}
+      .menu.open a:hover{background:#070b1e; text-decoration:none;}
     }
 
     /* Layout */
     .container{max-width:var(--maxw); margin:0 auto; padding:32px 18px 40px}
 
-    /* ===== Animations (PAGE + GRID) ===== */
-    @keyframes ambientShift {
-      0% {
-        background-position:
-          10% -20%,
-          90% -10%,
-          50% 120%,
-          0 0;
-      }
-      50% {
-        background-position:
-          16% -10%,
-          84% 0%,
-          56% 110%,
-          0 0;
-      }
-      100% {
-        background-position:
-          10% -20%,
-          90% -10%,
-          50% 120%,
-          0 0;
-      }
-    }
-
-    @keyframes gridDrift {
-      from { background-position: 0 0, 0 0; }
-      to   { background-position: 40px 40px, 40px 40px; }
-    }
-
-    /* ===== CARD SYSTEM (FIXED) =====
-       We DO NOT animate gradient backgrounds directly.
-       We animate a dedicated ::after "sheet" using transforms (GPU-friendly).
-    */
-
+    /* ===== CARD SYSTEM (TRUE DRIFT, INTENSIFIED) ===== */
     .hero,
     .card{
       position:relative;
@@ -246,39 +191,35 @@
         0 0 0 1px rgba(0,0,0,0.9),
         0 18px 40px rgba(0,0,0,0.85);
       overflow:hidden;
-
-      /* Base fill stays stable (prevents the “breathing border” look) */
       background: linear-gradient(135deg,#050714,#07091b);
+      transform: translateZ(0);
     }
 
-    /* Drifting gradient layer (this moves) */
+    /* Drifting “sheet” layer (stronger) */
     .hero::after,
     .card::after{
       content:"";
       position:absolute;
-      inset:-35%;
+      inset:-45%;
       z-index:0;
       pointer-events:none;
 
       background:
-        radial-gradient(circle at 25% 25%, rgba(0,250,255,0.18), transparent 55%),
-        radial-gradient(circle at 75% 75%, rgba(255,0,106,0.16), transparent 55%),
-        radial-gradient(circle at 55% 20%, rgba(129,43,255,0.14), transparent 55%);
+        radial-gradient(circle at 22% 28%, rgba(0,250,255,0.34), transparent 58%),
+        radial-gradient(circle at 78% 70%, rgba(255,0,106,0.30), transparent 58%),
+        radial-gradient(circle at 58% 20%, rgba(129,43,255,0.26), transparent 58%),
+        linear-gradient(135deg, rgba(0,250,255,0.06), rgba(255,0,106,0.06));
 
-      transform: translate3d(0,0,0) scale(1.05);
-      opacity:1;
-
+      mix-blend-mode: screen;
+      opacity: 1;
       animation: driftLayer var(--dur, 18s) linear infinite;
     }
 
     /* Keep content above drifting layer */
     .hero > *,
-    .card > *{
-      position:relative;
-      z-index:1;
-    }
+    .card > *{ position:relative; z-index:1; }
 
-    /* Hover glow overlay (above drift, below content) */
+    /* Hover glow overlay */
     .hero::before,
     .card::before{
       content:"";
@@ -286,30 +227,28 @@
       inset:-1px;
       z-index:2;
       background:linear-gradient(135deg,
-        rgba(0,250,255,0.5),
-        rgba(129,43,255,0.4),
-        rgba(255,0,106,0.5));
+        rgba(0,250,255,0.55),
+        rgba(129,43,255,0.45),
+        rgba(255,0,106,0.55));
       opacity:0;
       mix-blend-mode:screen;
       transition:opacity .28s ease-out;
       pointer-events:none;
     }
     .hero:hover::before,
-    .card:hover::before{
-      opacity:0.6;
-    }
+    .card:hover::before{ opacity:0.65; }
 
     @keyframes driftLayer{
-      0%   { transform: translate3d(var(--x1, -6%), var(--y1, -4%), 0) scale(1.10) rotate(var(--r1, 0deg)); }
-      50%  { transform: translate3d(var(--x2, 6%),  var(--y2, 4%),  0) scale(1.12) rotate(var(--r2, 6deg)); }
-      100% { transform: translate3d(var(--x1, -6%), var(--y1, -4%), 0) scale(1.10) rotate(var(--r1, 0deg)); }
+      0%   { transform: translate3d(var(--x1, -10%), var(--y1, -8%), 0) scale(1.18) rotate(var(--r1, 0deg)); }
+      50%  { transform: translate3d(var(--x2, 10%),  var(--y2, 8%),  0) scale(1.22) rotate(var(--r2, 10deg)); }
+      100% { transform: translate3d(var(--x1, -10%), var(--y1, -8%), 0) scale(1.18) rotate(var(--r1, 0deg)); }
     }
 
-    /* Drift presets (different motion paths per box) */
-    .drift-a{ --dur: 18s; --x1:-8%; --y1:-5%; --x2: 7%; --y2: 6%; --r1:-2deg; --r2: 6deg; }
-    .drift-b{ --dur: 24s; --x1: 6%; --y1:-7%; --x2:-8%; --y2: 5%; --r1: 3deg; --r2:-4deg; }
-    .drift-c{ --dur: 20s; --x1:-5%; --y1: 7%; --x2: 8%; --y2:-6%; --r1: 2deg; --r2: 8deg; }
-    .drift-d{ --dur: 28s; --x1: 8%; --y1: 4%; --x2:-7%; --y2:-5%; --r1:-3deg; --r2: 4deg; }
+    /* Drift presets (different paths) */
+    .drift-a{ --dur: 16s; --x1:-12%; --y1:-8%; --x2: 10%; --y2: 9%; --r1:-3deg; --r2: 10deg; }
+    .drift-b{ --dur: 22s; --x1: 10%; --y1:-10%; --x2:-12%; --y2: 8%; --r1: 4deg; --r2:-6deg; }
+    .drift-c{ --dur: 18s; --x1:-9%;  --y1: 10%; --x2: 12%; --y2:-9%; --r1: 3deg; --r2: 12deg; }
+    .drift-d{ --dur: 26s; --x1: 12%; --y1: 7%;  --x2:-10%; --y2:-8%; --r1:-4deg; --r2: 7deg; }
 
     /* HERO */
     .hero{
@@ -324,11 +263,7 @@
       box-shadow:0 0 18px rgba(0,250,255,0.4);
     }
 
-    .subtitle{
-      margin:0;
-      color:var(--muted);
-      font-size:13px;
-    }
+    .subtitle{margin:0; color:var(--muted); font-size:13px;}
 
     .kicker{
       font-family:"Space Mono", monospace;
@@ -339,9 +274,7 @@
       margin:10px 0 0;
     }
 
-    .cta-row{
-      display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;
-    }
+    .cta-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
 
     .btn{
       display:inline-flex; align-items:center; justify-content:center; gap:10px;
@@ -372,10 +305,7 @@
       border:1px solid rgba(0,250,255,0.6);
       box-shadow:0 0 16px rgba(0,0,0,0.85);
     }
-    .btn.secondary:hover{
-      background:rgba(0,250,255,0.08);
-      color:var(--text);
-    }
+    .btn.secondary:hover{background:rgba(0,250,255,0.08); color:var(--text);}
 
     /* Sections */
     section{margin:42px 0}
@@ -425,25 +355,17 @@
       border:1px solid var(--border-soft);
       box-shadow:0 0 14px rgba(0,0,0,0.85);
     }
-    .icon-btn:hover{
-      background:#070b1e;
-      box-shadow:0 0 20px rgba(0,250,255,0.4);
-    }
+    .icon-btn:hover{background:#070b1e; box-shadow:0 0 20px rgba(0,250,255,0.4);}
     svg{display:block}
 
     @media (max-width:780px){
-      .hero{
-        grid-template-columns:1fr;
-        text-align:left;
-      }
+      .hero{grid-template-columns:1fr; text-align:left;}
       .hero .cta-row{justify-content:flex-start}
     }
 
-    /* Accessibility & battery: respect reduced motion */
+    /* Accessibility & battery */
     @media (prefers-reduced-motion: reduce) {
-      body, body::before, .hero::after, .card::after {
-        animation: none !important;
-      }
+      .hero::after, .card::after { animation: none !important; }
     }
   </style>
 </head>
@@ -470,8 +392,8 @@
   </header>
 
   <main id="main">
-    <!-- HERO -->
     <div id="home" class="container">
+      <!-- HERO -->
       <section class="hero drift-a">
         <img class="avatar" src="https://i.imgur.com/PvrVL2J.jpeg" alt="Portrait of Altin Qalliu" loading="lazy" />
         <div>
@@ -600,7 +522,6 @@
   </footer>
 
   <script>
-    // current year
     document.getElementById('y').textContent = new Date().getFullYear();
   </script>
 </body>
