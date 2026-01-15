@@ -22,16 +22,12 @@
     :root{
       /* Retro / cyber palette */
       --bg: #02030a;
-      --bg-alt: #050718;
-      --panel: #050815;
-      --panel-2:#050612;
       --text:#e9f1ff;
       --muted:#8b93b5;
 
       --brand:#00faff;
       --brand-soft:#4ddcff;
       --brand-alt:#ff006a;
-      --brand-alt-soft:#ff5ba8;
 
       --link:#7ce0ff;
       --border:#171c32;
@@ -57,6 +53,7 @@
         var(--bg);
       position:relative;
       overflow-x:hidden;
+
       /* Ambient drift for the whole page (mobile-friendly) */
       background-size: 140% 140%, 140% 140%, 140% 140%, auto;
       animation: ambientShift 44s ease-in-out infinite;
@@ -76,58 +73,6 @@
       mix-blend-mode:soft-light;
       z-index:-1;
       animation: gridDrift 120s linear infinite;
-    }
-
-    /* Animations */
-    @keyframes ambientShift {
-      0% {
-        background-position:
-          10% -20%,
-          90% -10%,
-          50% 120%,
-          0 0;
-      }
-      50% {
-        background-position:
-          16% -10%,
-          84% 0%,
-          56% 110%,
-          0 0;
-      }
-      100% {
-        background-position:
-          10% -20%,
-          90% -10%,
-          50% 120%,
-          0 0;
-      }
-    }
-
-    @keyframes gridDrift {
-      from { background-position: 0 0, 0 0; }
-      to   { background-position: 40px 40px, 40px 40px; }
-    }
-
-    /* Per-card gradient drift */
-    @keyframes cardDrift {
-      0% {
-        background-position:
-          var(--p1x, 0%) var(--p1y, 0%),
-          var(--p2x, 100%) var(--p2y, 100%),
-          0% 0%;
-      }
-      50% {
-        background-position:
-          calc(var(--p1x, 0%) + var(--dx1, 8%)) calc(var(--p1y, 0%) + var(--dy1, 6%)),
-          calc(var(--p2x, 100%) + var(--dx2, -10%)) calc(var(--p2y, 100%) + var(--dy2, -8%)),
-          0% 0%;
-      }
-      100% {
-        background-position:
-          var(--p1x, 0%) var(--p1y, 0%),
-          var(--p2x, 100%) var(--p2y, 100%),
-          0% 0%;
-      }
     }
 
     a{color:var(--link); text-decoration:none}
@@ -156,10 +101,11 @@
     .muted{color:var(--muted)}
     .center{text-align:center}
 
-    /* Header / Nav */
+    /* Skip link */
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
     .skip-link:focus{left:12px;top:12px;width:auto;height:auto;background:#000;color:#fff;padding:8px 12px;border-radius:8px;z-index:999}
 
+    /* Header / Nav */
     header{
       position:sticky; top:0; z-index:50;
       backdrop-filter: blur(14px);
@@ -256,14 +202,44 @@
     /* Layout */
     .container{max-width:var(--maxw); margin:0 auto; padding:32px 18px 40px}
 
-    /* retro panel hover border */
+    /* ===== Animations (PAGE + GRID) ===== */
+    @keyframes ambientShift {
+      0% {
+        background-position:
+          10% -20%,
+          90% -10%,
+          50% 120%,
+          0 0;
+      }
+      50% {
+        background-position:
+          16% -10%,
+          84% 0%,
+          56% 110%,
+          0 0;
+      }
+      100% {
+        background-position:
+          10% -20%,
+          90% -10%,
+          50% 120%,
+          0 0;
+      }
+    }
+
+    @keyframes gridDrift {
+      from { background-position: 0 0, 0 0; }
+      to   { background-position: 40px 40px, 40px 40px; }
+    }
+
+    /* ===== CARD SYSTEM (FIXED) =====
+       We DO NOT animate gradient backgrounds directly.
+       We animate a dedicated ::after "sheet" using transforms (GPU-friendly).
+    */
+
     .hero,
     .card{
       position:relative;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(0,250,255,0.16), transparent 52%),
-        radial-gradient(circle at 100% 100%, rgba(255,0,106,0.18), transparent 55%),
-        linear-gradient(135deg,#050714,#07091b);
       border-radius:var(--radius);
       border:1px solid var(--border);
       box-shadow:
@@ -271,46 +247,44 @@
         0 18px 40px rgba(0,0,0,0.85);
       overflow:hidden;
 
-      /* Per-box drift (mobile-friendly) */
-      background-size: 140% 140%, 140% 140%, auto;
-      animation: cardDrift var(--dur, 28s) ease-in-out infinite;
+      /* Base fill stays stable (prevents the “breathing border” look) */
+      background: linear-gradient(135deg,#050714,#07091b);
     }
 
-    /* Different drift presets */
-    .drift-a {
-      --dur: 26s;
-      --p1x: 0%;  --p1y: 0%;
-      --p2x: 100%; --p2y: 100%;
-      --dx1: 10%; --dy1: 8%;
-      --dx2: -12%; --dy2: -10%;
-    }
-    .drift-b {
-      --dur: 34s;
-      --p1x: 10%; --p1y: 30%;
-      --p2x: 90%; --p2y: 70%;
-      --dx1: 14%; --dy1: 2%;
-      --dx2: -16%; --dy2: -2%;
-    }
-    .drift-c {
-      --dur: 30s;
-      --p1x: 30%; --p1y: 0%;
-      --p2x: 70%; --p2y: 100%;
-      --dx1: 4%; --dy1: 14%;
-      --dx2: -4%; --dy2: -16%;
-    }
-    .drift-d {
-      --dur: 38s;
-      --p1x: 20%; --p1y: 20%;
-      --p2x: 80%; --p2y: 80%;
-      --dx1: -10%; --dy1: 8%;
-      --dx2: 12%; --dy2: -10%;
+    /* Drifting gradient layer (this moves) */
+    .hero::after,
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:-35%;
+      z-index:0;
+      pointer-events:none;
+
+      background:
+        radial-gradient(circle at 25% 25%, rgba(0,250,255,0.18), transparent 55%),
+        radial-gradient(circle at 75% 75%, rgba(255,0,106,0.16), transparent 55%),
+        radial-gradient(circle at 55% 20%, rgba(129,43,255,0.14), transparent 55%);
+
+      transform: translate3d(0,0,0) scale(1.05);
+      opacity:1;
+
+      animation: driftLayer var(--dur, 18s) linear infinite;
     }
 
+    /* Keep content above drifting layer */
+    .hero > *,
+    .card > *{
+      position:relative;
+      z-index:1;
+    }
+
+    /* Hover glow overlay (above drift, below content) */
     .hero::before,
     .card::before{
       content:"";
       position:absolute;
       inset:-1px;
+      z-index:2;
       background:linear-gradient(135deg,
         rgba(0,250,255,0.5),
         rgba(129,43,255,0.4),
@@ -325,6 +299,19 @@
       opacity:0.6;
     }
 
+    @keyframes driftLayer{
+      0%   { transform: translate3d(var(--x1, -6%), var(--y1, -4%), 0) scale(1.10) rotate(var(--r1, 0deg)); }
+      50%  { transform: translate3d(var(--x2, 6%),  var(--y2, 4%),  0) scale(1.12) rotate(var(--r2, 6deg)); }
+      100% { transform: translate3d(var(--x1, -6%), var(--y1, -4%), 0) scale(1.10) rotate(var(--r1, 0deg)); }
+    }
+
+    /* Drift presets (different motion paths per box) */
+    .drift-a{ --dur: 18s; --x1:-8%; --y1:-5%; --x2: 7%; --y2: 6%; --r1:-2deg; --r2: 6deg; }
+    .drift-b{ --dur: 24s; --x1: 6%; --y1:-7%; --x2:-8%; --y2: 5%; --r1: 3deg; --r2:-4deg; }
+    .drift-c{ --dur: 20s; --x1:-5%; --y1: 7%; --x2: 8%; --y2:-6%; --r1: 2deg; --r2: 8deg; }
+    .drift-d{ --dur: 28s; --x1: 8%; --y1: 4%; --x2:-7%; --y2:-5%; --r1:-3deg; --r2: 4deg; }
+
+    /* HERO */
     .hero{
       display:grid; grid-template-columns: 140px 1fr; gap:22px; align-items:center;
       margin:40px auto 16px auto;
@@ -454,7 +441,7 @@
 
     /* Accessibility & battery: respect reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      body, body::before, .hero, .card {
+      body, body::before, .hero::after, .card::after {
         animation: none !important;
       }
     }
@@ -524,6 +511,7 @@
               <span class="pill">AI Research</span>
             </div>
           </article>
+
           <article class="card drift-c">
             <h3 class="muted">Education</h3>
             <ul class="list">
@@ -574,12 +562,7 @@
               maintainability and system architecture.
             </p>
             <div class="cta-row" style="margin-top:10px">
-              <a
-                class="btn secondary"
-                href="https://github.com/Ssechh/Vehicular-Cloud-Software-Engineering-Project"
-                target="_blank"
-                rel="noopener"
-              >Repo</a>
+              <a class="btn secondary" href="https://github.com/Ssechh/Vehicular-Cloud-Software-Engineering-Project" target="_blank" rel="noopener">Repo</a>
             </div>
           </article>
         </div>
