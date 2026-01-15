@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>SSECHH • Altin Qalliu</title>
-  <meta name="description" content="Altin Qalliu — CS student at St. John's University. Interests in game development, software engineering, databases, algorithms, and AI research." />
+  <meta name="description" content="Altin Qalliu — CS graduate (St. John's University, 2025) pursuing an M.S. in Computer Science at The City College of New York (Grove School of Engineering)." />
 
   <!-- Open Graph / Twitter -->
   <meta property="og:title" content="SSECHH • Altin Qalliu" />
-  <meta property="og:description" content="CS student at St. John's University — projects, publications, and contact." />
+  <meta property="og:description" content="CS graduate (2025) pursuing an M.S. in Computer Science — projects, publications, and contact." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://i.imgur.com/PvrVL2J.jpeg" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -17,8 +17,6 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-
-  <!-- <link rel="icon" href="/assets/favicon.png" /> -->
 
   <style>
     :root{
@@ -57,9 +55,11 @@
         radial-gradient(circle at 90% -10%, rgba(255,0,106,0.18), transparent 50%),
         radial-gradient(circle at 50% 120%, rgba(129,43,255,0.24), transparent 55%),
         var(--bg);
-
       position:relative;
       overflow-x:hidden;
+      /* Ambient drift for the whole page (mobile-friendly) */
+      background-size: 140% 140%, 140% 140%, 140% 140%, auto;
+      animation: ambientShift 44s ease-in-out infinite;
     }
 
     /* subtle CRT/grid overlay */
@@ -75,6 +75,59 @@
       opacity:0.25;
       mix-blend-mode:soft-light;
       z-index:-1;
+      animation: gridDrift 120s linear infinite;
+    }
+
+    /* Animations */
+    @keyframes ambientShift {
+      0% {
+        background-position:
+          10% -20%,
+          90% -10%,
+          50% 120%,
+          0 0;
+      }
+      50% {
+        background-position:
+          16% -10%,
+          84% 0%,
+          56% 110%,
+          0 0;
+      }
+      100% {
+        background-position:
+          10% -20%,
+          90% -10%,
+          50% 120%,
+          0 0;
+      }
+    }
+
+    @keyframes gridDrift {
+      from { background-position: 0 0, 0 0; }
+      to   { background-position: 40px 40px, 40px 40px; }
+    }
+
+    /* Per-card gradient drift */
+    @keyframes cardDrift {
+      0% {
+        background-position:
+          var(--p1x, 0%) var(--p1y, 0%),
+          var(--p2x, 100%) var(--p2y, 100%),
+          0% 0%;
+      }
+      50% {
+        background-position:
+          calc(var(--p1x, 0%) + var(--dx1, 8%)) calc(var(--p1y, 0%) + var(--dy1, 6%)),
+          calc(var(--p2x, 100%) + var(--dx2, -10%)) calc(var(--p2y, 100%) + var(--dy2, -8%)),
+          0% 0%;
+      }
+      100% {
+        background-position:
+          var(--p1x, 0%) var(--p1y, 0%),
+          var(--p2x, 100%) var(--p2y, 100%),
+          0% 0%;
+      }
     }
 
     a{color:var(--link); text-decoration:none}
@@ -217,6 +270,40 @@
         0 0 0 1px rgba(0,0,0,0.9),
         0 18px 40px rgba(0,0,0,0.85);
       overflow:hidden;
+
+      /* Per-box drift (mobile-friendly) */
+      background-size: 140% 140%, 140% 140%, auto;
+      animation: cardDrift var(--dur, 28s) ease-in-out infinite;
+    }
+
+    /* Different drift presets */
+    .drift-a {
+      --dur: 26s;
+      --p1x: 0%;  --p1y: 0%;
+      --p2x: 100%; --p2y: 100%;
+      --dx1: 10%; --dy1: 8%;
+      --dx2: -12%; --dy2: -10%;
+    }
+    .drift-b {
+      --dur: 34s;
+      --p1x: 10%; --p1y: 30%;
+      --p2x: 90%; --p2y: 70%;
+      --dx1: 14%; --dy1: 2%;
+      --dx2: -16%; --dy2: -2%;
+    }
+    .drift-c {
+      --dur: 30s;
+      --p1x: 30%; --p1y: 0%;
+      --p2x: 70%; --p2y: 100%;
+      --dx1: 4%; --dy1: 14%;
+      --dx2: -4%; --dy2: -16%;
+    }
+    .drift-d {
+      --dur: 38s;
+      --p1x: 20%; --p1y: 20%;
+      --p2x: 80%; --p2y: 80%;
+      --dx1: -10%; --dy1: 8%;
+      --dx2: 12%; --dy2: -10%;
     }
 
     .hero::before,
@@ -364,6 +451,13 @@
       }
       .hero .cta-row{justify-content:flex-start}
     }
+
+    /* Accessibility & battery: respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      body, body::before, .hero, .card {
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -391,23 +485,24 @@
   <main id="main">
     <!-- HERO -->
     <div id="home" class="container">
-      <section class="hero">
+      <section class="hero drift-a">
         <img class="avatar" src="https://i.imgur.com/PvrVL2J.jpeg" alt="Portrait of Altin Qalliu" loading="lazy" />
         <div>
           <h1>Altin Qalliu</h1>
 
-          <p class=""subtitle">
-            B.S. in Computer Science • St. John's University, Collins College of Professional Studies 2025
+          <p class="subtitle">
+            B.S in Computer Science • St. John's University, Collins College of Professional Studies 2025
           </p>
 
           <p class="kicker">BIO</p>
 
           <p class="muted" style="max-width: 640px; margin-top: 10px;">
-            I am a graduate with a B.S. in Computer Science from St. John's University, Collins College of Professional Studies (2025),
+            I am a graduate with a B.S. in Computer Science from St. John’s University, Collins College of Professional Studies (2025),
             and I am currently pursuing an M.S. in Computer Science at The City College of New York, Grove School of Engineering.
             My interests span software engineering, systems-level programming, and applied problem-solving.
             I enjoy building structured, reliable software and continuously expanding my skill set.
           </p>
+
           <div class="cta-row">
             <a class="btn" href="https://docs.google.com/document/d/e/2PACX-1vSbZg1QHpYYTTFa6xoXiUCVp4LNOzyj183M1URBYz9-JEVIWlOOrfcgARgzlA0F5JywheT6V-cz2SSb/pub" target="_blank" rel="noopener">View Resume (PDF)</a>
             <a class="btn secondary" href="#projects">Browse Projects</a>
@@ -419,7 +514,7 @@
       <section id="about">
         <h2 class="section-title">About</h2>
         <div class="grid cols-2">
-          <article class="card">
+          <article class="card drift-b">
             <h3 class="muted">Interests</h3>
             <div>
               <span class="pill">Game Development</span>
@@ -429,21 +524,12 @@
               <span class="pill">AI Research</span>
             </div>
           </article>
-          <article class="card">
+          <article class="card drift-c">
             <h3 class="muted">Education</h3>
             <ul class="list">
-              <li>
-                <strong>M.S. in Computer Science</strong> - The City College of New York, Grove School of Engineering
-                <span class="muted">(In Progress)</span>
-              </li>
-              <li>
-                <strong>B.S. in Computer Science</strong> - St. John's University, Collins College of Professional Studies
-                <span class="muted">(2025)</span>
-              </li>
-              <li>
-                <strong>Xavier High School</strong>
-                <span class="muted">(2021)</span>
-              </li>
+              <li><strong>M.S. in Computer Science</strong> — The City College of New York, Grove School of Engineering <span class="muted">(In Progress)</span></li>
+              <li><strong>B.S. in Computer Science</strong> — St. John's University, Collins College of Professional Studies <span class="muted">(2025)</span></li>
+              <li>Xavier High School <span class="muted">(2021)</span></li>
             </ul>
           </article>
         </div>
@@ -452,17 +538,16 @@
       <!-- PUBLICATIONS/CODE -->
       <section id="pubs">
         <h2 class="section-title">Publications &amp; Code</h2>
-        <div class="card">
+        <div class="card drift-d">
           <p class="muted">Publications, write-ups, and notable code will appear here.</p>
         </div>
       </section>
-
 
       <!-- PROJECTS -->
       <section id="projects">
         <h2 class="section-title">Projects</h2>
         <div class="grid cols-3">
-          <article class="card">
+          <article class="card drift-a">
             <h3>Project Name</h3>
             <p class="muted">N/A.</p>
             <div class="cta-row" style="margin-top:10px">
@@ -471,7 +556,7 @@
             </div>
           </article>
 
-          <article class="card">
+          <article class="card drift-b">
             <h3>Another Project</h3>
             <p class="muted">n/a.</p>
             <div class="cta-row" style="margin-top:10px">
@@ -480,21 +565,30 @@
             </div>
           </article>
 
-          <article class="card">
+          <article class="card drift-c">
             <h3>Coursework Highlight</h3>
             <p class="muted">
-              A capstone project for Software Engineering course, focused on vehicular cloud systems, emphasizing modular design, collaboration, and real-world constraints. The project utilizes java and MySQL stack.
+              A software engineering project focused on vehicular cloud systems,
+              emphasizing modular design, collaboration, and real-world constraints.
+              Developed as part of a structured academic setting with an emphasis on
+              maintainability and system architecture.
             </p>
             <div class="cta-row" style="margin-top:10px">
-              <a class="btn secondary" href="https://github.com/Ssechh/Vehicular-Cloud-Software-Engineering-Project" target="_blank" rel="noopener">Repo</a>
+              <a
+                class="btn secondary"
+                href="https://github.com/Ssechh/Vehicular-Cloud-Software-Engineering-Project"
+                target="_blank"
+                rel="noopener"
+              >Repo</a>
             </div>
           </article>
+        </div>
       </section>
 
       <!-- CONTACT -->
       <section id="contact">
         <h2 class="section-title">Contact</h2>
-        <div class="card center">
+        <div class="card drift-d center">
           <p class="muted" style="margin-top:0">I’m open to collaborations, internships, and research.</p>
           <div class="cta-row" style="justify-content:center">
             <a class="btn" href="mailto:altinq33@gmail.com">Email Me</a>
